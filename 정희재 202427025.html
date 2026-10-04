@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML/HTM & HTTP/HTTPS 차이점 분석 퀴즈</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f3ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8fafc;
+        }
+        .gradient-header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #2563eb 100%);
+        }
+        .option-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .option-card:hover {
+            transform: translateY(-2px);
+        }
+        .option-card.selected {
+            border-color: #4f46e5;
+            background-color: #f0f3ff;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+        }
+        .option-card.correct-answer {
+            border-color: #10b981 !important;
+            background-color: #ecfdf5 !important;
+        }
+        .option-card.wrong-answer {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <!-- Navigation / Header -->
+    <header class="gradient-header text-white shadow-lg">
+        <div class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide uppercase mb-2">
+                        컴퓨터 네트워크 / 웹 프로그래밍 과제
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">HTML vs HTM & HTTP vs HTTPS</h1>
+                    <p class="text-indigo-100 text-sm mt-1">차이점 분석 및 이해도 점검 퀴즈</p>
+                </div>
+                <!-- Submission Metadata Card -->
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 text-xs sm:text-sm space-y-1">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-user text-indigo-200 w-4"></i>
+                        <span>제출자: <strong>202427025 정희재</strong></span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-file-alt text-indigo-200 w-4"></i>
+                        <span>과제명: html/htm & http/https 분석</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-calendar text-indigo-200 w-4"></i>
+                        <span>작성일: <strong>2026년 10월 4일</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-4xl w-full mx-auto px-4 py-8 sm:px-6 lg:px-8 flex-grow">
+        
+        <!-- Progress Bar & Status -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 mb-8">
+            <div class="flex justify-between items-center mb-3">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">진행 상황</span>
+                <span id="progress-text" class="text-sm font-semibold text-indigo-600">0 / 5 문항 완료</span>
+            </div>
+            <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-600 h-3 rounded-full transition-all duration-300 w-0"></div>
+            </div>
+        </div>
+
+        <!-- Result Banner (Hidden by default) -->
+        <div id="result-card" class="hidden bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-indigo-100 mb-8 text-center animate-fade-in">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-50 text-indigo-600 mb-4 text-2xl" id="result-icon">
+                <i class="fa-solid fa-award"></i>
+            </div>
+            <h2 id="result-title" class="text-2xl font-bold text-slate-900 mb-2">퀴즈 결과</h2>
+            <p id="result-score" class="text-4xl font-extrabold text-indigo-600 mb-4">0 / 100점</p>
+            <p id="result-message" class="text-slate-600 max-w-lg mx-auto mb-6 text-sm sm:text-base">
+                모든 문제를 완료했습니다! 상세 해설을 통해 학습한 내용을 복습해보세요.
+            </p>
+            <button onclick="resetQuiz()" class="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl shadow-sm transition-all focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                <i class="fa-solid fa-rotate-right"></i> 다시 풀기
+            </button>
+        </div>
+
+        <!-- Quiz Form -->
+        <form id="quiz-form" class="space-y-8" onsubmit="event.preventDefault();">
+            <!-- Questions dynamically generated here or hardcoded for standard load -->
+            <div id="questions-container" class="space-y-8">
+                <!-- Question 1 -->
+                <div class="question-block bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/80" data-question-id="0">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-lg">Q1. 확장자 분석</span>
+                        <span class="text-xs text-slate-400 font-medium">배점: 20점</span>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900 mb-4">
+                        <span class="text-indigo-600">.html</span>과 <span class="text-indigo-600">.htm</span> 확장자 간의 기술적, 기능적 차이에 대한 설명으로 올바른 것은 무엇입니까?
+                    </h3>
+                    <div class="space-y-3">
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q0" value="0" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">1) .html은 최신 브라우저용이고, .htm은 구형 브라우저에서만 호환된다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q0" value="1" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">2) 두 확장자 간의 기능적, 기술적 차이는 전혀 없으며 브라우저와 웹 서버는 둘을 동일하게 처리한다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q0" value="2" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">3) .htm 파일은 보안 암호화 기능이 제외된 단순한 텍스트 파일 형태이다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q0" value="3" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">4) .html 파일만 검색엔진 상위 노출(SEO)을 지원한다.</span>
+                        </label>
+                    </div>
+                    <div class="feedback hidden mt-4 p-4 rounded-xl text-sm leading-relaxed"></div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="question-block bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/80" data-question-id="1">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-lg">Q2. 역사적 배경</span>
+                        <span class="text-xs text-slate-400 font-medium">배점: 20점</span>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900 mb-4">
+                        과거에 <span class="text-indigo-600">.html</span> 대신 <span class="text-indigo-600">.htm</span> 확장자가 사용되었던 주된 원인은 무엇입니까?
+                    </h3>
+                    <div class="space-y-3">
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q1" value="0" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">1) 초기 인터넷 통신 속도가 너무 느려 확장자 길이를 축소해야 했다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q1" value="1" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">2) 과거 MS-DOS 및 Windows 3.x 운영체제에서 확장자 길이를 최대 3글자까지만 허용했기 때문이다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q1" value="2" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">3) 라이선스 문제로 인해 4글자 확장자 표준 사용이 상업적으로 제한되었다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q1" value="3" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">4) Unix 시스템 서버와의 호환성 문제를 방지하기 위한 표준 규약이었다.</span>
+                        </label>
+                    </div>
+                    <div class="feedback hidden mt-4 p-4 rounded-xl text-sm leading-relaxed"></div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="question-block bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/80" data-question-id="2">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-lg">Q3. 포트 번호</span>
+                        <span class="text-xs text-slate-400 font-medium">배점: 20점</span>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900 mb-4">
+                        HTTP와 HTTPS 프로토콜이 기본적으로 사용하는 포트(Port) 번호 연결로 올바른 것은?
+                    </h3>
+                    <div class="space-y-3">
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q2" value="0" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">1) HTTP: 21 / HTTPS: 22</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q2" value="1" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">2) HTTP: 8080 / HTTPS: 8443</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q2" value="2" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">3) HTTP: 80 / HTTPS: 443</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q2" value="3" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">4) HTTP: 443 / HTTPS: 80</span>
+                        </label>
+                    </div>
+                    <div class="feedback hidden mt-4 p-4 rounded-xl text-sm leading-relaxed"></div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="question-block bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/80" data-question-id="3">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-lg">Q4. 프로토콜 분석</span>
+                        <span class="text-xs text-slate-400 font-medium">배점: 20점</span>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900 mb-4">
+                        <span class="text-indigo-600">HTTPS</span>에 대한 설명 중 <span class="text-red-600 font-bold">올바르지 않은</span> 내용은 무엇입니까?
+                    </h3>
+                    <div class="space-y-3">
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q3" value="0" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">1) SSL/TLS 인증서를 사용하여 통신 데이터를 암호화 처리한다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q3" value="1" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">2) 데이터를 평문(일반 텍스트)으로 전송하므로 제3자가 쉽게 가로채 읽을 수 있다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q3" value="2" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">3) 웹 브라우저 주소창에 자물쇠 아이콘이 표시되어 보안 신뢰도를 높인다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q3" value="3" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">4) 데이터의 무단 변조 및 도난 위험을 크게 감소시킨다.</span>
+                        </label>
+                    </div>
+                    <div class="feedback hidden mt-4 p-4 rounded-xl text-sm leading-relaxed"></div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="question-block bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200/80" data-question-id="4">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-lg">Q5. HTTPS의 이점</span>
+                        <span class="text-xs text-slate-400 font-medium">배점: 20점</span>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-bold text-slate-900 mb-4">
+                        보안 강화 외에 웹사이트가 <span class="text-indigo-600">HTTPS</span>를 적용할 때 얻을 수 있는 주요 이점으로 옳게 설명된 것은?
+                    </h3>
+                    <div class="space-y-3">
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q4" value="0" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">1) 데이터 암호화 해제로 인해 웹사이트 로딩 속도가 2배 이상 빨라진다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q4" value="1" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">2) 별도의 웹 서버 설정 없이도 도메인을 무료로 갱신받을 수 있다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q4" value="2" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">3) 구글, 네이버 등 주요 검색엔진의 검색 결과 순위 결정(SEO)에서 가산점을 받는다.</span>
+                        </label>
+                        <label class="option-card flex items-start p-4 rounded-xl border border-slate-200 cursor-pointer">
+                            <input type="radio" name="q4" value="3" class="mt-1 text-indigo-600 focus:ring-indigo-500" onchange="updateProgress()">
+                            <span class="ml-3 text-sm sm:text-base text-slate-700">4) 모든 프론트엔드 CSS/JS 자바스크립트 버그가 자동으로 교정된다.</span>
+                        </label>
+                    </div>
+                    <div class="feedback hidden mt-4 p-4 rounded-xl text-sm leading-relaxed"></div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-end gap-4 pt-4">
+                <button type="button" onclick="submitQuiz()" class="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> 정답 확인하기
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-4xl mx-auto px-4 space-y-1">
+            <p>© 2026 정희재. All Rights Reserved.</p>
+            <p class="text-slate-400">보고서 기반 웹 프로토콜 학습 퀴즈 시스템</p>
+        </div>
+    </footer>
+
+    <script>
+        // Quiz Data Definition & Explanations
+        const quizData = [
+            {
+                correct: 1,
+                explanation: "<strong>정답: 2번</strong><br>보고서에 명시되었듯, .html과 .htm 확장자는 기능적, 기술적으로 완전히 동일하며 최신 브라우저와 웹 서버 역시 두 파일을 똑같이 인식하여 처리합니다."
+            },
+            {
+                correct: 1,
+                explanation: "<strong>정답: 2번</strong><br>과거 MS-DOS 및 Windows 3.x 환경에서는 파일 확장자를 최대 3글자(8.3 파일명 규칙)로 제한했기 때문에 .html 대신 .htm을 사용했습니다."
+            },
+            {
+                correct: 2,
+                explanation: "<strong>정답: 3번</strong><br>기본 통신 포트 번호로 HTTP는 <strong>80번</strong> 포트를, SSL/TLS 암호화가 적용된 HTTPS는 <strong>443번</strong> 포트를 사용합니다."
+            },
+            {
+                correct: 1,
+                explanation: "<strong>정답: 2번</strong><br>데이터를 평문(일반 텍스트)으로 전송하여 제3자가 쉽게 가로채 읽을 수 있는 것은 <strong>HTTP</strong>의 취약점 특징입니다. HTTPS는 SSL/TLS를 통해 암호화합니다."
+            },
+            {
+                correct: 2,
+                explanation: "<strong>정답: 3번</strong><br>HTTPS를 도입하면 데이터 보호뿐만 아니라 구글, 네이버 등 검색엔진 최적화(SEO)에서 우대를 받아 검색 순위 유지 및 신뢰도 향상에 유리합니다."
+            }
+        ];
+
+        // UI Interactions: Option selection highlight
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                const name = radio.name;
+                
+                // Clear selected style within the same group
+                document.querySelectorAll(`input[name="${name}"]`).forEach(input => {
+                    input.closest('.option-card').classList.remove('selected');
+                });
+
+                // Highlight clicked card
+                this.classList.add('selected');
+            });
+        });
+
+        // Update progress bar
+        function updateProgress() {
+            const totalQuestions = quizData.length;
+            let answeredCount = 0;
+
+            for (let i = 0; i < totalQuestions; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) answeredCount++;
+            }
+
+            const percentage = (answeredCount / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+            document.getElementById('progress-text').innerText = `${answeredCount} / ${totalQuestions} 문항 선택 완료`;
+        }
+
+        // Submit and evaluate quiz
+        function submitQuiz() {
+            const totalQuestions = quizData.length;
+            let answeredCount = 0;
+            let score = 0;
+
+            // Check if all questions are answered
+            for (let i = 0; i < totalQuestions; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                    answeredCount++;
+                }
+            }
+
+            if (answeredCount < totalQuestions) {
+                alert(`모든 문항에 답해주세요. (현재 ${answeredCount}/${totalQuestions} 완료)`);
+                return;
+            }
+
+            // Grade questions
+            for (let i = 0; i < totalQuestions; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const userVal = parseInt(selected.value);
+                const qBlock = document.querySelector(`[data-question-id="${i}"]`);
+                const feedbackEl = qBlock.querySelector('.feedback');
+                const optionCards = qBlock.querySelectorAll('.option-card');
+
+                // Reset option styles
+                optionCards.forEach(card => {
+                    card.classList.remove('correct-answer', 'wrong-answer');
+                });
+
+                if (userVal === quizData[i].correct) {
+                    score += 20;
+                    optionCards[userVal].classList.add('correct-answer');
+                    feedbackEl.className = "feedback mt-4 p-4 rounded-xl text-sm leading-relaxed bg-emerald-50 text-emerald-800 border border-emerald-200 block";
+                    feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check mr-2 text-emerald-600"></i><strong>정답입니다!</strong><br>${quizData[i].explanation}`;
+                } else {
+                    optionCards[userVal].classList.add('wrong-answer');
+                    optionCards[quizData[i].correct].classList.add('correct-answer');
+                    feedbackEl.className = "feedback mt-4 p-4 rounded-xl text-sm leading-relaxed bg-rose-50 text-rose-800 border border-rose-200 block";
+                    feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark mr-2 text-rose-600"></i><strong>오답입니다.</strong><br>${quizData[i].explanation}`;
+                }
+            }
+
+            // Display Results
+            const resultCard = document.getElementById('result-card');
+            const resultScore = document.getElementById('result-score');
+            const resultMessage = document.getElementById('result-message');
+            const resultIcon = document.getElementById('result-icon');
+
+            resultScore.innerText = `${score} / 100점`;
+            resultCard.classList.remove('hidden');
+
+            if (score === 100) {
+                resultIcon.className = "inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-4 text-2xl";
+                resultIcon.innerHTML = `<i class="fa-solid fa-trophy"></i>`;
+                resultMessage.innerText = "만점입니다! HTML/HTM 확장자와 HTTP/HTTPS 보안 프로토콜 개념을 완전하게 이해하셨습니다.";
+            } else if (score >= 60) {
+                resultIcon.className = "inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 mb-4 text-2xl";
+                resultIcon.innerHTML = `<i class="fa-solid fa-award"></i>`;
+                resultMessage.innerText = "우수한 성적입니다! 틀린 문제의 정답 해설을 통해 개념을 완벽히 다져보세요.";
+            } else {
+                resultIcon.className = "inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 text-amber-600 mb-4 text-2xl";
+                resultIcon.innerHTML = `<i class="fa-solid fa-book-open"></i>`;
+                resultMessage.innerText = "보고서의 주요 개념을 재복습하고 정답 해설을 확인해 보세요.";
+            }
+
+            // Smooth scroll to top/results
+            window.scrollTo({ top: resultCard.offsetTop - 30, behavior: 'smooth' });
+        }
+
+        // Reset Quiz Form
+        function resetQuiz() {
+            document.getElementById('quiz-form').reset();
+            
+            // Remove styles
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected', 'correct-answer', 'wrong-answer');
+            });
+
+            // Hide feedbacks
+            document.querySelectorAll('.feedback').forEach(fb => {
+                fb.classList.add('hidden');
+            });
+
+            // Hide result banner
+            document.getElementById('result-card').classList.add('hidden');
+
+            // Reset progress bar
+            updateProgress();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
